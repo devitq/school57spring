@@ -49,12 +49,12 @@
 
 ## **Раздел 4: Схема взаимодействия экранов**
 
-![Screenshot_11.jpg](https://gitlab.education.tbank.ru/tclass-frontend-angular-2025/Lectures/-/raw/master/lesson-3-Spec/Screenshot_11.jpg?ref_type=heads)
+![Screenshot_11.jpg](https://github.com/rkarabash/school57spring/blob/master/lesson1/Screenshot_11.jpg?ref_type=heads)
 
 
 ## **Раздел 5: ER-диаграмма**
 
-![Screenshot_10.jpg](https://gitlab.education.tbank.ru/tclass-frontend-angular-2025/Lectures/-/raw/master/lesson-3-Spec/Screenshot_10.jpg?ref_type=heads)
+![Screenshot_10.jpg](https://github.com/rkarabash/school57spring/blob/master/lesson1/Screenshot_10.jpg?ref_type=heads)
 
 ## **Раздел 6: Дополнительная информация**
 
@@ -70,4 +70,5 @@
 - Реабилитационный/ Диета/ Питание . Вместо бюджета — реабилитационный протокол, вместо расходов — выполненные упражнения/приёмы лекарств. 
 - Образовательный трекер/Творческий марафон. Вместо бюджета — курс, вместо расходов — потраченное время или выполненные задания. 
 - Трекер привычек и личной эффективности. Вместо бюджета — “Привычки на месяц”, вместо расходов — факт выполнения.
+
 - Детский трекер (сон, кормление, подгузники, развитие). Вместо бюджета — ребёнок, вместо расходов — события дня. 
