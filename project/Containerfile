@@ -40,9 +40,9 @@ RUN mkdir -p ${APP_HOME}/dist \
 # Stage 2: Runtime
 FROM docker.io/eclipse-temurin:21-jre-jammy AS runtime
 
-LABEL org.opencontainers.image.title="KnowletBackend" \
-      org.opencontainers.image.description="KnowletBackend application" \
-      org.opencontainers.image.authors="Knowlet team"
+LABEL org.opencontainers.image.title="MovieNight" \
+      org.opencontainers.image.description="MovieNight application" \
+      org.opencontainers.image.authors="MovieNight team"
 
 WORKDIR /app
 

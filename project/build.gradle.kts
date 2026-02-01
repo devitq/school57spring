@@ -135,10 +135,6 @@ protobuf {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
@@ -151,7 +147,7 @@ tasks.withType<Test> {
 }
 
 tasks.processResources {
-    filesMatching("**/application.yml") {
+    filesMatching("**/application.y{a,}ml") {
         filter { line ->
             line.replace("\${project.version}", project.version.toString())
         }
@@ -167,7 +163,6 @@ tasks.named<BootJar>("bootJar") {
 
 tasks.named<Jar>("jar") {
     enabled = false
-    archiveClassifier.set("")
 }
 
 ktlint {

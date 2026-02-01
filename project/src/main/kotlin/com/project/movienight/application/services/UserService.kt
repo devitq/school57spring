@@ -1,19 +1,19 @@
 package com.project.movienight.application.services
 
-import com.project.movienight.adapters.persistence.inmemory.UserRepositoryAdapter
 import com.project.movienight.application.ports.input.CreateUserCommand
 import com.project.movienight.application.ports.input.CreateUserUseCase
 import com.project.movienight.application.ports.input.DeleteUserUseCase
 import com.project.movienight.application.ports.input.EditUserCommand
 import com.project.movienight.application.ports.input.EditUserUseCase
 import com.project.movienight.application.ports.output.IdGenerator
+import com.project.movienight.application.ports.output.UserRepositoryPort
 import com.project.movienight.domain.model.User
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
 class UserService(
-    private val userRepository: UserRepositoryAdapter,
+    private val userRepository: UserRepositoryPort,
     private val idGenerator: IdGenerator,
 ) : CreateUserUseCase,
     EditUserUseCase,
