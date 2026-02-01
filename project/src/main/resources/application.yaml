@@ -1,3 +1,10 @@
 spring:
   application:
     name: MovieNight
+
+services:
+  user:
+    blocked-names:
+      - admin
+      - root
+      - system
