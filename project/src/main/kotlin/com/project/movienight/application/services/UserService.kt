@@ -16,7 +16,7 @@ import java.util.UUID
 class UserService(
     private val userRepository: UserRepositoryPort,
     private val idGenerator: IdGenerator,
-    private val userConfig: UserServiceProperties
+    private val userConfig: UserServiceProperties,
 ) : CreateUserUseCase,
     EditUserUseCase,
     DeleteUserUseCase {
@@ -25,12 +25,13 @@ class UserService(
             throw IllegalArgumentException("User with this name is not acceptable")
         }
 
-        val user = User(
-            id = idGenerator.generateId(),
-            name = command.name,
-            email = command.email,
-            library = null,
-        )
+        val user =
+            User(
+                id = idGenerator.generateId(),
+                name = command.name,
+                email = command.email,
+                library = null,
+            )
         return userRepository.save(user)
     }
 

@@ -3,7 +3,7 @@ import org.gradle.api.tasks.Exec
 /**
  * Usage:
  *  - ./gradlew dockerBuild
- *  - ./gradlew dockerPush (requires DOCKER_REGISTRY and DOCKER_REPOSITORY set)
+ *  - ./gradlew dockerPush
  */
 
 val dockerImageName: String = (project.findProperty("dockerImageName") as String?) ?: run {

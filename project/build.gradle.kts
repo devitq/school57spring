@@ -140,7 +140,7 @@ tasks.withType<Test> {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         showStandardStreams = false
     }
-    maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
+    maxParallelForks = maxOf(1, Runtime.getRuntime().availableProcessors() / 2)
     minHeapSize = "512m"
     maxHeapSize = "2048m"
     systemProperty("spring.profiles.active", "test")

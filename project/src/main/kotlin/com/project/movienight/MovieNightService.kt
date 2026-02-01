@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class MovieNightService(
     private val userService: UserService,
-    private val userConfig : UserServiceProperties
+    private val userConfig: UserServiceProperties,
 ) : CommandLineRunner {
     fun performActions() {
         println("Заблокированные имена пользователей: ${userConfig.blockedNames}")
