@@ -7,15 +7,13 @@ import org.springframework.stereotype.Component
 
 @Component
 class MovieNightService(
-    private val userService : UserService,
-
+    private val userService: UserService,
 ) : CommandLineRunner {
-
     fun performActions() {
         println("Создание пользователей...")
-        val userAboba = userService.create(CreateUserCommand(name="абоба", email = "aboba228@mail.com"))
-        val userAlice = userService.create(CreateUserCommand(name="алиса", email = "alice@mail.com"))
-        val userBob = userService.create(CreateUserCommand(name="боб", email = "bob@mail.com"))
+        val userAboba = userService.create(CreateUserCommand(name = "абоба", email = "aboba228@mail.com"))
+        val userAlice = userService.create(CreateUserCommand(name = "алиса", email = "alice@mail.com"))
+        val userBob = userService.create(CreateUserCommand(name = "боб", email = "bob@mail.com"))
 
         println(userAboba)
         println(userAlice)

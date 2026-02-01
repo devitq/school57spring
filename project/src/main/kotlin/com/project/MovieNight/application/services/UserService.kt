@@ -3,15 +3,21 @@ package com.project.movienight.application.services
 import com.project.movienight.adapters.persistence.inmemory.UserRepositoryAdapter
 import com.project.movienight.application.ports.input.CreateUserCommand
 import com.project.movienight.application.ports.input.CreateUserUseCase
+import com.project.movienight.application.ports.input.DeleteUserUseCase
+import com.project.movienight.application.ports.input.EditUserCommand
+import com.project.movienight.application.ports.input.EditUserUseCase
 import com.project.movienight.application.ports.output.IdGenerator
 import com.project.movienight.domain.model.User
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class UserService(
     private val userRepository: UserRepositoryAdapter,
     private val idGenerator: IdGenerator,
-) : CreateUserUseCase {
+) : CreateUserUseCase,
+    EditUserUseCase,
+    DeleteUserUseCase {
     override fun create(command: CreateUserCommand): User =
         userRepository.save(
             User(
@@ -21,4 +27,21 @@ class UserService(
                 library = null,
             ),
         )
+
+    override fun edit(
+        id: UUID,
+        command: EditUserCommand,
+    ) {
+        val user = userRepository.findById(id) ?: throw IllegalArgumentException("User with id $id not found")
+
+        user.name = command.name
+
+        userRepository.save(user)
+    }
+
+    override fun delete(id: UUID) {
+        userRepository.findById(id) ?: throw IllegalArgumentException("User with id $id not found")
+
+        userRepository.deleteById(id)
+    }
 }
