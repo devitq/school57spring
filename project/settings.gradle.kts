@@ -1,4 +1,4 @@
-rootProject.name = "MovieNight"
+rootProject.name = "movienight"
 
 pluginManagement {
     repositories {

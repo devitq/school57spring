@@ -1,16 +1,16 @@
+import com.google.protobuf.gradle.id
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import com.google.protobuf.gradle.id
 
 plugins {
-	kotlin("jvm") version "2.2.21"
-	kotlin("plugin.spring") version "2.2.21"
-	id("org.springframework.boot") version "4.0.2"
-	id("io.spring.dependency-management") version "1.1.7"
-	id("com.google.protobuf") version "0.9.6"
+    kotlin("jvm") version "2.2.21"
+    kotlin("plugin.spring") version "2.2.21"
+    id("org.springframework.boot") version "4.0.2"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("com.google.protobuf") version "0.9.6"
 
-	alias(libs.plugins.ktlint)
+    alias(libs.plugins.ktlint)
     // alias(libs.plugins.detekt)
     jacoco
 }
@@ -27,53 +27,55 @@ java {
 }
 
 configurations {
-	compileOnly {
-		extendsFrom(configurations.annotationProcessor.get())
-	}
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 extra["sentryVersion"] = "8.27.0"
 extra["springGrpcVersion"] = "1.0.1"
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-h2console")
-	implementation("org.springframework.boot:spring-boot-micrometer-tracing-brave")
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-starter-cache")
-	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
-	implementation("org.springframework.boot:spring-boot-starter-flyway")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("io.grpc:grpc-services")
-	implementation("io.micrometer:micrometer-tracing-bridge-brave")
-	implementation("io.sentry:sentry-spring-boot-4-starter")
-	implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:2.0.1")
-	implementation("org.flywaydb:flyway-database-postgresql")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-h2console")
+    implementation("org.springframework.boot:spring-boot-micrometer-tracing-brave")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    implementation("org.springframework.boot:spring-boot-starter-flyway")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("io.grpc:grpc-services")
+    implementation("io.micrometer:micrometer-tracing-bridge-brave")
+    implementation("io.sentry:sentry-spring-boot-4-starter")
+    implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:2.0.1")
+    implementation("org.flywaydb:flyway-database-postgresql")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation(libs.emailverifier.kt)
 
-	compileOnly("org.projectlombok:lombok")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("com.h2database:h2")
-	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
-	runtimeOnly("org.postgresql:postgresql")
-	annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    runtimeOnly("com.h2database:h2")
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+    runtimeOnly("org.postgresql:postgresql")
+    annotationProcessor("org.projectlombok:lombok")
 
-	testImplementation("org.springframework.boot:spring-boot-micrometer-tracing-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-cache-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-security-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testImplementation("org.springframework.grpc:spring-grpc-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.springframework.boot:spring-boot-micrometer-tracing-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-cache-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-security-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.springframework.grpc:spring-grpc-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<KotlinCompile> {
@@ -99,40 +101,40 @@ tasks.withType<JavaCompile> {
 }
 
 dependencyManagement {
-	imports {
-		mavenBom("io.sentry:sentry-bom:${property("sentryVersion")}")
-		mavenBom("org.springframework.grpc:spring-grpc-dependencies:${property("springGrpcVersion")}")
-	}
+    imports {
+        mavenBom("io.sentry:sentry-bom:${property("sentryVersion")}")
+        mavenBom("org.springframework.grpc:spring-grpc-dependencies:${property("springGrpcVersion")}")
+    }
 }
 
 kotlin {
-	compilerOptions {
-		freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
-	}
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
+    }
 }
 
 protobuf {
-	protoc {
-		artifact = "com.google.protobuf:protoc:3.25.1"
-	}
-	plugins {
-		id("grpc") {
-			artifact = "io.grpc:protoc-gen-grpc-java:1.60.0"
-		}
-	}
-	generateProtoTasks {
-		all().forEach {
-			it.plugins {
-				id("grpc") {
-					option("@generated=omit")
-				}
-			}
-		}
-	}
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.1"
+    }
+    plugins {
+        id("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.60.0"
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.plugins {
+                id("grpc") {
+                    option("@generated=omit")
+                }
+            }
+        }
+    }
 }
 
 tasks.withType<Test> {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 tasks.withType<Test> {
