@@ -16,7 +16,7 @@ interface EditFilmUseCase {
     fun edit(
         id: UUID,
         command: EditFilmCommand,
-    )
+    ): Film
 }
 
 data class EditFilmCommand(

@@ -40,7 +40,7 @@ class FilmService(
     override fun edit(
         id: UUID,
         command: EditFilmCommand,
-    ) {
+    ): Film {
         if (filmConfig.isBlocked(command.title)) {
             throw IllegalArgumentException("Film with this title is not acceptable")
         }
@@ -48,12 +48,13 @@ class FilmService(
             throw IllegalArgumentException("Film with this description is not acceptable")
         }
 
-        val film = filmRepository.findById(id) ?: throw IllegalArgumentException("Film with id $id not found")
+        var film = filmRepository.findById(id) ?: throw IllegalArgumentException("Film with id $id not found")
 
-        film.title = command.title
-        film.description = command.description
+        film = film.copy(title = command.title, description = command.description)
 
         filmRepository.save(film)
+
+        return film
     }
 
     override fun delete(id: UUID) {

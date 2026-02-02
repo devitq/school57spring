@@ -6,13 +6,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 data class FilmServiceProperties(
     val blockedPatterns: List<String> = listOf(),
 ) {
-    val normalized: Set<String> = blockedPatterns.map { it.trim().lowercase() }.toSet()
+    val normalized: Set<String> =
+        blockedPatterns
+            .map { it.trim().lowercase() }
+            .filter { it.isNotBlank() }
+            .toSet()
 
     fun isBlocked(fieldValue: String): Boolean {
-        val fieldValue = fieldValue.lowercase()
+        val normalizedFieldValue = fieldValue.lowercase()
 
         normalized.forEach { pattern ->
-            if (fieldValue.contains(pattern)) {
+            if (normalizedFieldValue.contains(pattern)) {
                 return true
             }
         }

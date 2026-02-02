@@ -19,12 +19,12 @@ class MovieNightService(
     private val filmConfig: FilmServiceProperties,
 ) : CommandLineRunner {
     fun performActions() {
-        println("Заблокированные имена пользователей: ${userConfig.normalized}")
-        println("Заблокированные паттерны в описании фильмов: ${filmConfig.normalized}")
+        println("Заблокированные имена пользователей: ${userConfig.blockedNames}")
+        println("Заблокированные паттерны в описании фильмов: ${filmConfig.blockedPatterns}")
 
         println("Создание пользователей...")
 
-        val userAboba = userService.create(CreateUserCommand(name = "абоба", email = "aboba228@mail.com"))
+        var userAboba = userService.create(CreateUserCommand(name = "абоба", email = "aboba228@mail.com"))
         println(userAboba)
 
         val userAlice = userService.create(CreateUserCommand(name = "алиса", email = "alice@mail.com"))
@@ -35,7 +35,7 @@ class MovieNightService(
 
         println("Создание фильмов...")
 
-        val filmSpiderMan =
+        var filmSpiderMan =
             filmService.create(
                 CreateFilmCommand(
                     "Spider-Man: Beyond the Spider-Verse",
@@ -54,21 +54,21 @@ class MovieNightService(
         println(filmStarWars)
 
         println("Редактирование фильма ${filmSpiderMan.title}")
-        filmService.edit(filmSpiderMan.id, EditFilmCommand("Delayed", "-"))
+        filmSpiderMan = filmService.edit(filmSpiderMan.id, EditFilmCommand("Delayed", "-"))
         println(filmSpiderMan)
 
         println("Редактирование пользователя ${userAboba.name}")
-        userService.edit(userAboba.id, EditUserCommand("абеме"))
+        userAboba = userService.edit(userAboba.id, EditUserCommand("абеме"))
         println(userAboba)
 
-        println("Создание пользователя с запрешённым именем")
+        println("Создание пользователя с запрещённым именем")
         try {
             userService.create(CreateUserCommand(name = "admin", email = "admin@mail.com"))
         } catch (e: IllegalArgumentException) {
             println("error: ${e.message}")
         }
 
-        println("Создание фильмов с запрешёнными паттернами")
+        println("Создание фильмов с запрещённым паттернами")
         try {
             filmService.create(CreateFilmCommand("Python", "Python is the best language"))
         } catch (e: IllegalArgumentException) {
