@@ -4,6 +4,6 @@ import java.util.UUID
 
 data class Film(
     val id: UUID,
-    val title: String,
-    val description: String,
+    var title: String,
+    var description: String,
 )
