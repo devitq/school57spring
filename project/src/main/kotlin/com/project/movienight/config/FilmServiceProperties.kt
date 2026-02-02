@@ -15,12 +15,6 @@ data class FilmServiceProperties(
     fun isBlocked(fieldValue: String): Boolean {
         val normalizedFieldValue = fieldValue.lowercase()
 
-        normalized.forEach { pattern ->
-            if (normalizedFieldValue.contains(pattern)) {
-                return true
-            }
-        }
-
-        return false
+        return normalized.any { pattern -> normalizedFieldValue.contains(pattern) }
     }
 }
