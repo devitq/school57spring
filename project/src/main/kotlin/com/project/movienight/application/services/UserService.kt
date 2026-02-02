@@ -47,9 +47,7 @@ class UserService(
 
         user = user.copy(name = command.name)
 
-        userRepository.save(user)
-
-        return user
+        return userRepository.save(user)
     }
 
     override fun delete(id: UUID) {

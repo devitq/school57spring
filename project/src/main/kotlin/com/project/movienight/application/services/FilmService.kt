@@ -52,9 +52,7 @@ class FilmService(
 
         film = film.copy(title = command.title, description = command.description)
 
-        filmRepository.save(film)
-
-        return film
+        return filmRepository.save(film)
     }
 
     override fun delete(id: UUID) {
