@@ -1,27 +1,27 @@
 package com.project.movienight.application.ports.input
 
-import com.project.movienight.domain.model.User
+import com.project.movienight.domain.model.Film
 import java.util.UUID
 
 interface CreateFilmUseCase {
-    fun create(command: CreateFilmsUseCase): Film
+    fun create(command: CreateFilmCommand): Film
 }
 
 data class CreateFilmCommand(
-    val name: String,
-    val genre: String,
-    val description: String
+    val title: String,
+    val description: String,
 )
 
-interface UpdateFilmUseCase {
-    fun update(
+interface EditFilmUseCase {
+    fun edit(
         id: UUID,
-        command: UpdateFilmsCommand,
-    )
+        command: EditFilmCommand,
+    ): Film
 }
 
-data class UpdateFilmCommand(
-    val name: String
+data class EditFilmCommand(
+    val title: String,
+    val description: String,
 )
 
 interface DeleteFilmUseCase {

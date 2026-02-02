@@ -16,7 +16,7 @@ interface EditUserUseCase {
     fun edit(
         id: UUID,
         command: EditUserCommand,
-    )
+    ): User
 }
 
 data class EditUserCommand(

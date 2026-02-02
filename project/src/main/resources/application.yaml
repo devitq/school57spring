@@ -8,3 +8,8 @@ services:
       - admin
       - root
       - system
+  film:
+    blocked-patterns:
+      - censored
+      - epstein
+      - python

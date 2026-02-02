@@ -38,12 +38,16 @@ class UserService(
     override fun edit(
         id: UUID,
         command: EditUserCommand,
-    ) {
-        val user = userRepository.findById(id) ?: throw IllegalArgumentException("User with id $id not found")
+    ): User {
+        if (userConfig.isBlocked(command.name)) {
+            throw IllegalArgumentException("User with this name is not acceptable")
+        }
 
-        user.name = command.name
+        var user = userRepository.findById(id) ?: throw IllegalArgumentException("User with id $id not found")
 
-        userRepository.save(user)
+        user = user.copy(name = command.name)
+
+        return userRepository.save(user)
     }
 
     override fun delete(id: UUID) {

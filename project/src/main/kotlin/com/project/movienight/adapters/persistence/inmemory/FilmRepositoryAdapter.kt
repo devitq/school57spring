@@ -1,26 +1,26 @@
 package com.project.movienight.adapters.persistence.inmemory
 
-import com.project.movienight.application.ports.output.UserRepositoryPort
-import com.project.movienight.domain.model.User
+import com.project.movienight.application.ports.output.FilmRepositoryPort
+import com.project.movienight.domain.model.Film
 import org.springframework.stereotype.Repository
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 @Repository
-class FilmRepositoryAdapter : UserRepositoryPort {
-    private val users: MutableMap<UUID, User> = ConcurrentHashMap()
+class FilmRepositoryAdapter : FilmRepositoryPort {
+    private val films: MutableMap<UUID, Film> = ConcurrentHashMap()
 
-    override fun save(user: User): User {
-        users[user.id] = user
+    override fun save(film: Film): Film {
+        films[film.id] = film
 
-        return user
+        return film
     }
 
-    override fun findById(id: UUID): User? = users[id]
+    override fun findById(id: UUID): Film? = films[id]
 
-    override fun findAll(): List<User> = users.values.toList()
+    override fun findAll(): List<Film> = films.values.toList()
 
     override fun deleteById(id: UUID) {
-        users.remove(id)
+        films.remove(id)
     }
 }

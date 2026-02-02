@@ -4,9 +4,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "services.film")
 data class FilmServiceProperties(
-    val blockedNames: List<String> = listOf(),
+    val blockedPatterns: List<String> = listOf(),
 ) {
-    private val normalized: Set<String> = blockedNames.map { it.trim().lowercase() }.toSet()
+    val normalized: Set<String> =
+        blockedPatterns
+            .map { it.trim().lowercase() }
+            .filter { it.isNotBlank() }
+            .toSet()
 
-    fun isBlocked(name: String): Boolean = name.trim().lowercase() in normalized
+    fun isBlocked(fieldValue: String): Boolean {
+        val normalizedFieldValue = fieldValue.lowercase()
+
+        return normalized.any { pattern -> normalizedFieldValue.contains(pattern) }
+    }
 }

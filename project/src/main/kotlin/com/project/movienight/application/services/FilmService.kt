@@ -5,8 +5,8 @@ import com.project.movienight.application.ports.input.CreateFilmUseCase
 import com.project.movienight.application.ports.input.DeleteFilmUseCase
 import com.project.movienight.application.ports.input.EditFilmCommand
 import com.project.movienight.application.ports.input.EditFilmUseCase
-import com.project.movienight.application.ports.output.IdGenerator
 import com.project.movienight.application.ports.output.FilmRepositoryPort
+import com.project.movienight.application.ports.output.IdGenerator
 import com.project.movienight.config.FilmServiceProperties
 import com.project.movienight.domain.model.Film
 import org.springframework.stereotype.Service
@@ -14,41 +14,50 @@ import java.util.UUID
 
 @Service
 class FilmService(
-    private val FilmRepository: FilmRepositoryPort,
+    private val filmRepository: FilmRepositoryPort,
     private val idGenerator: IdGenerator,
-    private val FilmConfig: FilmServiceProperties,
+    private val filmConfig: FilmServiceProperties,
 ) : CreateFilmUseCase,
     EditFilmUseCase,
     DeleteFilmUseCase {
     override fun create(command: CreateFilmCommand): Film {
-        if (FilmConfig.isBlocked(command.name)) {
-            throw IllegalArgumentException("Film with this name is not acceptable")
+        if (filmConfig.isBlocked(command.title)) {
+            throw IllegalArgumentException("Film with this title is not acceptable")
+        }
+        if (filmConfig.isBlocked(command.description)) {
+            throw IllegalArgumentException("Film with this description is not acceptable")
         }
 
-        val Film =
+        val film =
             Film(
                 id = idGenerator.generateId(),
-                name = command.name,
-                email = command.email,
-                library = null,
+                title = command.title,
+                description = command.description,
             )
-        return FilmRepository.save(Film)
+        return filmRepository.save(film)
     }
 
     override fun edit(
         id: UUID,
         command: EditFilmCommand,
-    ) {
-        val Film = FilmRepository.findById(id) ?: throw IllegalArgumentException("Film with id $id not found")
+    ): Film {
+        if (filmConfig.isBlocked(command.title)) {
+            throw IllegalArgumentException("Film with this title is not acceptable")
+        }
+        if (filmConfig.isBlocked(command.description)) {
+            throw IllegalArgumentException("Film with this description is not acceptable")
+        }
 
-        Film.name = command.name
+        var film = filmRepository.findById(id) ?: throw IllegalArgumentException("Film with id $id not found")
 
-        FilmRepository.save(Film)
+        film = film.copy(title = command.title, description = command.description)
+
+        return filmRepository.save(film)
     }
 
     override fun delete(id: UUID) {
-        FilmRepository.findById(id) ?: throw IllegalArgumentException("Film with id $id not found")
+        filmRepository.findById(id) ?: throw IllegalArgumentException("Film with id $id not found")
 
-        FilmRepository.deleteById(id)
+        filmRepository.deleteById(id)
     }
 }
