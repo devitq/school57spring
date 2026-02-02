@@ -5,9 +5,12 @@ import com.project.movienight.application.ports.input.CreateUserUseCase
 import com.project.movienight.application.ports.input.DeleteUserUseCase
 import com.project.movienight.application.ports.input.EditUserCommand
 import com.project.movienight.application.ports.input.EditUserUseCase
+import com.project.movienight.application.ports.input.ListUserUseCase
+import com.project.movienight.application.ports.input.ReadUserUseCase
 import com.project.movienight.application.ports.output.IdGenerator
 import com.project.movienight.application.ports.output.UserRepositoryPort
 import com.project.movienight.config.UserServiceProperties
+import com.project.movienight.domain.model.Film
 import com.project.movienight.domain.model.User
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -18,8 +21,10 @@ class UserService(
     private val idGenerator: IdGenerator,
     private val userConfig: UserServiceProperties,
 ) : CreateUserUseCase,
+    ReadUserUseCase,
     EditUserUseCase,
-    DeleteUserUseCase {
+    DeleteUserUseCase,
+    ListUserUseCase {
     override fun create(command: CreateUserCommand): User {
         if (userConfig.isBlocked(command.name)) {
             throw IllegalArgumentException("User with this name is not acceptable")
@@ -34,6 +39,8 @@ class UserService(
             )
         return userRepository.save(user)
     }
+
+    override fun read(id: UUID): User? = userRepository.findById(id)
 
     override fun edit(
         id: UUID,
@@ -55,4 +62,6 @@ class UserService(
 
         userRepository.deleteById(id)
     }
+
+    override fun list(): List<User> = userRepository.findAll()
 }

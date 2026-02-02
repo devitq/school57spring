@@ -5,6 +5,8 @@ import com.project.movienight.application.ports.input.CreateFilmUseCase
 import com.project.movienight.application.ports.input.DeleteFilmUseCase
 import com.project.movienight.application.ports.input.EditFilmCommand
 import com.project.movienight.application.ports.input.EditFilmUseCase
+import com.project.movienight.application.ports.input.ListFilmUseCase
+import com.project.movienight.application.ports.input.ReadFilmUseCase
 import com.project.movienight.application.ports.output.FilmRepositoryPort
 import com.project.movienight.application.ports.output.IdGenerator
 import com.project.movienight.config.FilmServiceProperties
@@ -18,8 +20,10 @@ class FilmService(
     private val idGenerator: IdGenerator,
     private val filmConfig: FilmServiceProperties,
 ) : CreateFilmUseCase,
+    ReadFilmUseCase,
     EditFilmUseCase,
-    DeleteFilmUseCase {
+    DeleteFilmUseCase,
+    ListFilmUseCase {
     override fun create(command: CreateFilmCommand): Film {
         if (filmConfig.isBlocked(command.title)) {
             throw IllegalArgumentException("Film with this title is not acceptable")
@@ -36,6 +40,8 @@ class FilmService(
             )
         return filmRepository.save(film)
     }
+
+    override fun read(id: UUID): Film? = filmRepository.findById(id)
 
     override fun edit(
         id: UUID,
@@ -60,4 +66,6 @@ class FilmService(
 
         filmRepository.deleteById(id)
     }
+
+    override fun list(): List<Film> = filmRepository.findAll()
 }

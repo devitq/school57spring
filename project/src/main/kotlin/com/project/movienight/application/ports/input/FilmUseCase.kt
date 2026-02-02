@@ -12,6 +12,10 @@ data class CreateFilmCommand(
     val description: String,
 )
 
+interface ReadFilmUseCase {
+    fun read(id: UUID): Film?
+}
+
 interface EditFilmUseCase {
     fun edit(
         id: UUID,
@@ -26,4 +30,8 @@ data class EditFilmCommand(
 
 interface DeleteFilmUseCase {
     fun delete(id: UUID)
+}
+
+interface ListFilmUseCase {
+    fun list(): List<Film>
 }

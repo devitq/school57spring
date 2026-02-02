@@ -22,6 +22,8 @@ class MovieNightService(
         println("Заблокированные имена пользователей: ${userConfig.blockedNames}")
         println("Заблокированные паттерны в описании фильмов: ${filmConfig.blockedPatterns}")
 
+        println()
+
         println("Создание пользователей...")
 
         var userAboba = userService.create(CreateUserCommand(name = "абоба", email = "aboba228@mail.com"))
@@ -53,6 +55,16 @@ class MovieNightService(
             )
         println(filmStarWars)
 
+        println()
+
+        println("Список фильмов")
+        println(filmService.list())
+
+        println("Список пользователей")
+        println(userService.list())
+
+        println()
+
         println("Редактирование фильма ${filmSpiderMan.title}")
         filmSpiderMan = filmService.edit(filmSpiderMan.id, EditFilmCommand("Delayed", "-"))
         println(filmSpiderMan)
@@ -75,6 +87,8 @@ class MovieNightService(
             println("error: ${e.message}")
         }
 
+        println()
+
         println("Удаление пользователей")
         userService.delete(userAboba.id)
         userService.delete(userAlice.id)
@@ -83,6 +97,14 @@ class MovieNightService(
         println("Удаление фильмов")
         filmService.delete(filmSpiderMan.id)
         filmService.delete(filmStarWars.id)
+
+        println()
+
+        println("Список фильмов")
+        println(filmService.list())
+
+        println("Список пользователей")
+        println(userService.list())
     }
 
     override fun run(vararg args: String) {

@@ -1,5 +1,6 @@
 package com.project.movienight.application.ports.input
 
+import com.project.movienight.domain.model.Film
 import com.project.movienight.domain.model.User
 import java.util.UUID
 
@@ -11,6 +12,10 @@ data class CreateUserCommand(
     val name: String,
     val email: String,
 )
+
+interface ReadUserUseCase {
+    fun read(id: UUID): User?
+}
 
 interface EditUserUseCase {
     fun edit(
@@ -25,4 +30,8 @@ data class EditUserCommand(
 
 interface DeleteUserUseCase {
     fun delete(id: UUID)
+}
+
+interface ListUserUseCase {
+    fun list(): List<User>
 }
