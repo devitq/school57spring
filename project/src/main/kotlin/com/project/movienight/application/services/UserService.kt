@@ -39,6 +39,10 @@ class UserService(
         id: UUID,
         command: EditUserCommand,
     ) {
+        if (userConfig.isBlocked(command.name)) {
+            throw IllegalArgumentException("User with this name is not acceptable")
+        }
+
         val user = userRepository.findById(id) ?: throw IllegalArgumentException("User with id $id not found")
 
         user.name = command.name
