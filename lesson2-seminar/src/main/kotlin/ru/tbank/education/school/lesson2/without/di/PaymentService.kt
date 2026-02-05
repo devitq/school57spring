@@ -22,7 +22,8 @@ class SbpPaymentProcessor {
     }
 }
 
-fun main() {
-    val paymentService = PaymentService()
-    paymentService.processPayment(1000)
-}
+// spring require single main class
+//fun main() {
+//    val paymentService = PaymentService()
+//    paymentService.processPayment(1000)
+//}
