@@ -4,4 +4,5 @@ import java.util.UUID
 
 data class FilmLibrary(
     val id: UUID,
+    val userId: UUID,
 )
