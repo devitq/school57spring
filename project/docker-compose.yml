@@ -6,19 +6,52 @@ services:
       context: .
       dockerfile: Containerfile
     depends_on:
+      valkey:
+        restart: false
+        condition: service_healthy
+        required: true
       postgres:
         restart: false
         condition: service_healthy
         required: true
+      minio:
+        restart: false
+        condition: service_healthy
+        required: true
+    env_file:
+      - path: ./infrastructure/configs/backend/.env.template
+        required: true
+      - path: ./infrastructure/configs/backend/.env
+        required: false
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      start_period: 5s
+      start_interval: 2s
+      retries: 5
+    ports:
+      - name: http
+        target: 8080
+        published: 13640
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
     networks:
       - default
     restart: unless-stopped
+    shm_size: 4mb
 
   postgres:
     image: docker.io/postgres:17-alpine
-    networks:
-      - default
-    restart: unless-stopped
+    configs:
+      - source: postgres_config
+        target: /etc/postgresql/postgresql.conf
+    env_file:
+      - path: ./infrastructure/configs/postgres/.env.template
+        required: true
+      - path: ./infrastructure/configs/postgres/.env
+        required: false
     healthcheck:
       test: [ "CMD", "pg_isready", "--dbname=app" ]
       interval: 10s
@@ -26,11 +59,17 @@ services:
       start_period: 5s
       start_interval: 2s
       retries: 5
+    networks:
+      - default
+    oom_kill_disable: true
+    restart: unless-stopped
+    shm_size: 128mb
     volumes:
       - type: volume
         source: data
         target: /var/lib/postgresql/data
         read_only: false
+
 
   pgadmin:
     image: docker.io/dpage/pgadmin4:9
@@ -73,6 +112,118 @@ services:
         target: /var/lib/pgadmin
         read_only: false
 
+  rabbitmq:
+    image: docker.io/rabbitmq:4-management-alpine
+    env_file:
+      - path: ./infrastructure/configs/rabbitmq/.env.template
+        required: true
+      - path: ./infrastructure/configs/rabbitmq/.env
+        required: false
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 5s
+      start_period: 5s
+      start_interval: 2s
+      retries: 5
+    ports:
+      - name: amqp
+        target: 5672
+        published: 13642
+        host_ip: 127.0.0.1
+        protocol: tcp
+      - name: management
+        target: 15672
+        published: 13643
+        host_ip: 127.0.0.1
+        protocol: tcp
+    networks:
+      - default
+    profiles:
+      - messaging
+    restart: unless-stopped
+    shm_size: 4mb
+    volumes:
+      - type: volume
+        source: rabbitmq_data
+        target: /var/lib/rabbitmq
+        read_only: false
+
+  minio-init:
+    image: docker.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc alias set minio http://minio:9000 admin password;
+      /usr/bin/mc mb minio/knowlet;
+      exit 0;
+      "
+    env_file:
+      - path: ./infrastructure/configs/minio/.env.template
+        required: true
+      - path: ./infrastructure/configs/minio/.env
+        required: false
+    restart: no
+    volumes:
+      - type: volume
+        source: minio_data
+        target: /data
+
+  minio:
+    image: docker.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    command: server --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 1m30s
+      timeout: 5s
+      start_period: 5s
+      start_interval: 2s
+      retries: 5
+    env_file:
+      - path: ./infrastructure/configs/minio/.env.template
+        required: true
+      - path: ./infrastructure/configs/minio/.env
+        required: false
+    ports:
+      - name: api
+        target: 9000
+        published: 13644
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
+      - name: console
+        target: 9001
+        published: 13645
+        host_ip: 127.0.0.1
+        protocol: tcp
+        app_protocol: http
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: minio_data
+        target: /data
+
+  valkey:
+    image: docker.io/valkey/valkey:9-alpine
+    command: valkey-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      start_period: 5s
+      start_interval: 2s
+      retries: 5
+    networks:
+      - default
+    restart: unless-stopped
+    shm_size: 4mb
+    volumes:
+      - type: volume
+        source: valkey_data
+        target: /data
+        read_only: false
+
+
 networks:
   default:
     driver: bridge
@@ -84,5 +235,16 @@ networks:
 
 
 volumes:
+  data:
   pgadmin_data:
+  rabbitmq_data:
+  minio_data:
+  valkey_data:
+
+
+configs:
+  postgres_config:
+    file: ./infrastructure/configs/postgres/postgresql.conf
+  pgadmin_servers_config:
+    file: ./infrastructure/configs/pgadmin/servers.json
 
