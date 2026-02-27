@@ -247,4 +247,3 @@ configs:
     file: ./infrastructure/configs/postgres/postgresql.conf
   pgadmin_servers_config:
     file: ./infrastructure/configs/pgadmin/servers.json
-
