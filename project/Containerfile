@@ -26,7 +26,6 @@ COPY src src
 RUN --mount=type=cache,target=${GRADLE_USER_HOME} \
     ./gradlew --no-daemon build \
       -x test \
-      -x detekt \
       -x ktlintCheck \
       -x ktlintKotlinScriptCheck \
       -x ktlintMainSourceSetCheck \
