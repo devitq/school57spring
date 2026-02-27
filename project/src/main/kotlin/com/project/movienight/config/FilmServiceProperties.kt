@@ -1,6 +1,7 @@
 package com.project.movienight.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import java.util.Locale
 
 @ConfigurationProperties(prefix = "services.film")
 data class FilmServiceProperties(
@@ -13,7 +14,7 @@ data class FilmServiceProperties(
             .toSet()
 
     fun isBlocked(fieldValue: String): Boolean {
-        val normalizedFieldValue = fieldValue.lowercase()
+        val normalizedFieldValue = fieldValue.lowercase(Locale.ROOT)
 
         return normalized.any { pattern -> normalizedFieldValue.contains(pattern) }
     }
