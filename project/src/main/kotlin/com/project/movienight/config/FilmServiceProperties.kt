@@ -1,8 +1,10 @@
 package com.project.movienight.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.stereotype.Component
 import java.util.Locale
 
+@Component
 @ConfigurationProperties(prefix = "services.film")
 data class FilmServiceProperties(
     val blockedPatterns: List<String> = listOf(),

@@ -14,7 +14,7 @@ import com.project.movienight.domain.model.Film
 import org.springframework.stereotype.Service
 import java.util.UUID
 
-@Service
+@Service("filmService")
 class FilmService(
     private val filmRepository: FilmRepositoryPort,
     private val idGenerator: IdGenerator,
@@ -24,6 +24,7 @@ class FilmService(
     EditFilmUseCase,
     DeleteFilmUseCase,
     ListFilmUseCase {
+
     override fun create(command: CreateFilmCommand): Film {
         if (filmConfig.isBlocked(command.title)) {
             throw IllegalArgumentException("Film with this title is not acceptable")
@@ -32,21 +33,18 @@ class FilmService(
             throw IllegalArgumentException("Film with this description is not acceptable")
         }
 
-        val film =
-            Film(
-                id = idGenerator.generateId(),
-                title = command.title,
-                description = command.description,
-            )
+        val film = Film(
+            id = idGenerator.generateId(),
+            title = command.title,
+            description = command.description,
+        )
+
         return filmRepository.save(film)
     }
 
     override fun read(id: UUID): Film? = filmRepository.findById(id)
 
-    override fun edit(
-        id: UUID,
-        command: EditFilmCommand,
-    ): Film {
+    override fun edit(id: UUID, command: EditFilmCommand): Film {
         if (filmConfig.isBlocked(command.title)) {
             throw IllegalArgumentException("Film with this title is not acceptable")
         }
@@ -54,15 +52,20 @@ class FilmService(
             throw IllegalArgumentException("Film with this description is not acceptable")
         }
 
-        var film = filmRepository.findById(id) ?: throw IllegalArgumentException("Film with id $id not found")
+        val existingFilm = filmRepository.findById(id)
+            ?: throw IllegalArgumentException("Film with id $id not found")
 
-        film = film.copy(title = command.title, description = command.description)
+        val updatedFilm = existingFilm.copy(
+            title = command.title,
+            description = command.description
+        )
 
-        return filmRepository.save(film)
+        return filmRepository.save(updatedFilm)
     }
 
     override fun delete(id: UUID) {
-        filmRepository.findById(id) ?: throw IllegalArgumentException("Film with id $id not found")
+        filmRepository.findById(id)
+            ?: throw IllegalArgumentException("Film with id $id not found")
 
         filmRepository.deleteById(id)
     }
